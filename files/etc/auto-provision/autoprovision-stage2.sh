@@ -4,19 +4,32 @@
 
 . /etc/auto-provision/autoprovision-functions.sh
 
+# Verify we are connected to the Internet
+is_connected() {
+    ping -q -c3 1.1.1.1 >/dev/null 2>&1
+    return $?
+}
+
+# Log to the system log and echo if needed
+log_say()
+{
+    echo "${1}"
+    logger "${1}"
+}
+
 installPackages()
 {
     signalAutoprovisionWaitingForUser
 
     until (opkg update)
      do
-        log "opkg update failed. No internet connection? Retrying in 15 seconds..."
+        log_say "opkg update failed. No internet connection? Retrying in 15 seconds..."
         sleep 15
     done
 
     signalAutoprovisionWorking
 
-    log "Autoprovisioning stage2 is about to install packages"
+    log_say "Autoprovisioning stage2 is about to install packages"
 
     # switch ssh from dropbear to openssh (needed to install sshtunnel)
     #opkg remove dropbear
@@ -27,30 +40,29 @@ installPackages()
     #chmod 0700 /root/.ssh
     #mv /etc/dropbear/authorized_keys /root/.ssh/
     #rm -rf /etc/dropbear
-   sed -i 's,https,http,g' /etc/opkg/distfeeds.conf;
     # CUSTOMIZE
     # install some more packages that don't need any extra steps
- echo "updating all packages!"
+   log_say "updating all packages!"
 
-   echo "                                                                      "
-   echo " ███████████             ███                         █████            "
-   echo "░░███░░░░░███           ░░░                         ░░███             "
-   echo " ░███    ░███ ████████  ████  █████ █████  ██████   ███████    ██████ "
-   echo " ░██████████ ░░███░░███░░███ ░░███ ░░███  ░░░░░███ ░░░███░    ███░░███"
-   echo " ░███░░░░░░   ░███ ░░░  ░███  ░███  ░███   ███████   ░███    ░███████ "
-   echo " ░███         ░███      ░███  ░░███ ███   ███░░███   ░███ ███░███░░░  "
-   echo " █████        █████     █████  ░░█████   ░░████████  ░░█████ ░░██████ "
-   echo "░░░░░        ░░░░░     ░░░░░    ░░░░░     ░░░░░░░░    ░░░░░   ░░░░░░  "
-   echo "                                                                      "
-   echo "                                                                      "
-   echo " ███████████                        █████                             "
-   echo "░░███░░░░░███                      ░░███                              "
-   echo " ░███    ░███   ██████  █████ ████ ███████    ██████  ████████        "
-   echo " ░██████████   ███░░███░░███ ░███ ░░░███░    ███░░███░░███░░███       "
-   echo " ░███░░░░░███ ░███ ░███ ░███ ░███   ░███    ░███████  ░███ ░░░        "
-   echo " ░███    ░███ ░███ ░███ ░███ ░███   ░███ ███░███░░░   ░███            "
-   echo " █████   █████░░██████  ░░████████  ░░█████ ░░██████  █████           "
-   echo "░░░░░   ░░░░░  ░░░░░░    ░░░░░░░░    ░░░░░   ░░░░░░  ░░░░░            "
+   log_say "                                                                      "
+   log_say " ███████████             ███                         █████            "
+   log_say "░░███░░░░░███           ░░░                         ░░███             "
+   log_say " ░███    ░███ ████████  ████  █████ █████  ██████   ███████    ██████ "
+   log_say " ░██████████ ░░███░░███░░███ ░░███ ░░███  ░░░░░███ ░░░███░    ███░░███"
+   log_say " ░███░░░░░░   ░███ ░░░  ░███  ░███  ░███   ███████   ░███    ░███████ "
+   log_say " ░███         ░███      ░███  ░░███ ███   ███░░███   ░███ ███░███░░░  "
+   log_say " █████        █████     █████  ░░█████   ░░████████  ░░█████ ░░██████ "
+   log_say "░░░░░        ░░░░░     ░░░░░    ░░░░░     ░░░░░░░░    ░░░░░   ░░░░░░  "
+   log_say "                                                                      "
+   log_say "                                                                      "
+   log_say " ███████████                        █████                             "
+   log_say "░░███░░░░░███                      ░░███                              "
+   log_say " ░███    ░███   ██████  █████ ████ ███████    ██████  ████████        "
+   log_say " ░██████████   ███░░███░░███ ░███ ░░░███░    ███░░███░░███░░███       "
+   log_say " ░███░░░░░███ ░███ ░███ ░███ ░███   ░███    ░███████  ░███ ░░░        "
+   log_say " ░███    ░███ ░███ ░███ ░███ ░███   ░███ ███░███░░░   ░███            "
+   log_say " █████   █████░░██████  ░░████████  ░░█████ ░░██████  █████           "
+   log_say "░░░░░   ░░░░░  ░░░░░░    ░░░░░░░░    ░░░░░   ░░░░░░  ░░░░░            "
 
    opkg update
    #Go Go Packages
@@ -71,8 +83,6 @@ installPackages()
    echo "Installing V2rayA..."
   ## download
 
-  opkg update; opkg install unzip wget-ssl
-
     ## Remove DNSMasq
 
   opkg remove dnsmasq
@@ -83,23 +93,22 @@ installPackages()
 
   opkg install /etc/luci-app-v2raya_6_all.ipk
 
-  sed -i 's,http,https,g' /etc/opkg/distfeeds.conf;
-
-  echo "PrivateRouter update complete!"
+  log_say "PrivateRouter update complete!"
 }
 
 autoprovisionStage2()
 {
-    log "Autoprovisioning stage2 speaking"
+    log_say "Autoprovisioning stage2 speaking"
 
     # TODO this is a rather sloppy way to test whether stage2 has been done already, but this is a shell script...
     if [ $(uci get system.@system[0].log_type) == "file" ]; then
-        log "Seems like autoprovisioning stage2 has been done already. Running stage3."
+        log_say "Seems like autoprovisioning stage2 has been done already. Running stage3."
         #/root/autoprovision-stage3.py
     else
         signalAutoprovisionWorking
-ping 19
-	echo Updating system time using ntp; otherwise the openwrt.org certificates are rejected as not yet valid.
+
+  echo "nameserver 1.1.1.1" > /etc/resolv.conf
+	log_say "Updating system time using ntp; otherwise the openwrt.org certificates are rejected as not yet valid."
         ntpd -d -q -n -p 0.openwrt.pool.ntp.org
 
         # CUSTOMIZE: with an empty argument it will set a random password and only ssh key based login will work.
@@ -130,5 +139,26 @@ EOF
         reboot
     fi
 }
+
+fixPackagesDNS()
+{
+    log_say "Fixing DNS and installing required packages for opkg"
+    # Set our router's dns
+    echo "nameserver 1.1.1.1" > /etc/resolv.conf
+
+    log_say "Installing opkg packages"
+    opkg --no-check-certificate update
+    opkg --no-check-certificate install wget-ssl unzip ca-bundle ca-certificates
+    opkg --no-check-certificate install git git-http jq curl unzip
+}
+
+# Check and wait for Internet connection
+while ! is_connected; do
+    log_say "Waiting for Internet connection..."
+    sleep 1
+done
+log_say "Internet connection established"
+
+fixPackagesDNS
 
 autoprovisionStage2
