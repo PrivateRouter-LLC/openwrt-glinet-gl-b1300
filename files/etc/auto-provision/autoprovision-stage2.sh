@@ -17,6 +17,18 @@ log_say()
     logger "${1}"
 }
 
+fixPackagesDNS()
+{
+    log_say "Fixing DNS and installing required packages for opkg"
+    # Set our router's dns
+    echo "nameserver 1.1.1.1" > /etc/resolv.conf
+
+    log_say "Installing opkg packages"
+    opkg --no-check-certificate update
+    opkg --no-check-certificate install wget-ssl unzip ca-bundle ca-certificates
+    opkg --no-check-certificate install git git-http jq curl unzip
+}
+
 installPackages()
 {
     signalAutoprovisionWaitingForUser
@@ -138,18 +150,6 @@ EOF
         sync
         reboot
     fi
-}
-
-fixPackagesDNS()
-{
-    log_say "Fixing DNS and installing required packages for opkg"
-    # Set our router's dns
-    echo "nameserver 1.1.1.1" > /etc/resolv.conf
-
-    log_say "Installing opkg packages"
-    opkg --no-check-certificate update
-    opkg --no-check-certificate install wget-ssl unzip ca-bundle ca-certificates
-    opkg --no-check-certificate install git git-http jq curl unzip
 }
 
 # Check and wait for Internet connection
