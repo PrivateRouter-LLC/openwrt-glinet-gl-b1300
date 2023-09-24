@@ -97,24 +97,14 @@ installPackages()
    opkg install libuclient20201210 libustream-wolfssl20201210 libxtables12 logd lua luci luci-app-firewall luci-app-opkg luci-base luci-lib-base luci-lib-ip luci-lib-jsonc luci-lib-nixio
    opkg install luci-mod-admin-full luci-mod-network luci-mod-status luci-mod-system
    opkg install luci-proto-ipv6 luci-proto-ppp luci-ssl luci-theme-bootstrap luci-app-statistics luci-mod-dashboard luci-app-vnstat
-   opkg install luci-app-openvpn wireguard-tools luci-app-wireguard openvpn-openssl mtd netifd odhcp6c odhcpd-ipv6only openwrt-keyring opkg ppp ppp-mod-pppoe procd px5g-wolfssl
+   opkg install netifd odhcp6c odhcpd-ipv6only openwrt-keyring opkg ppp ppp-mod-pppoe procd
    opkg install openwrt-keyring ppp ppp-mod-pppoe procd px5g-wolfssl kmod-usb-storage block-mount kmod-fs-ext4 kmod-fs-exfat fdisk luci-compat luci-lib-ipkg
-   opkg install git git-http jq curl bash wget kmod-usb-net-rndis luci-mod-dashboard luci-app-commands luci-app-vnstat rpcd-mod-luci luci-app-statistics luci-mod-admin-full luci-mod-network luci-mod-status luci-mod-system kmod-usb-net-cdc-eem
-   opkg install  kmod-usb-net-cdc-ether kmod-usb-net-cdc-subset kmod-nls-base kmod-usb-core kmod-usb-net kmod-usb-net-cdc-ether kmod-usb2 kmod-usb-net-ipheth usbmuxd libimobiledevice usbutils luci-app-nlbwmon luci-app-adblock nano ttyd fail2ban 
+   opkg install git git-http jq curl bash wget kmod-usb-net-rndis luci-mod-dashboard luci-app-commands luci-app-vnstat rpcd-mod-luci luci-app-statistics luci-mod-admin-full luci-mod-system kmod-usb-net-cdc-eem
+   opkg install  kmod-usb-net-cdc-ether kmod-usb-net-cdc-subset kmod-nls-base kmod-usb-core kmod-usb-net kmod-usb-net-cdc-ether kmod-usb2 kmod-usb-net-ipheth usbmuxd libimobiledevice usbutils 
+   opkg install /etc/luci-app-argon-config_0.9-20210309_all.ipk
+   opkg install /etc/luci-theme-argon_2.2.9-20211016-1_all.ipk
 
- ## V2RAYA INSTALLER ##
-   echo "Installing V2rayA..."
-  ## download
 
-    ## Remove DNSMasq
-
-  opkg remove dnsmasq
-
-  opkg install dnsmasq-full
-
-  opkg install v2raya
-
-  opkg install /etc/luci-app-v2raya_6_all.ipk
 
   log_say "PrivateRouter update complete!"
 }
