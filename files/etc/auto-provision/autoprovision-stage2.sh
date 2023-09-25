@@ -53,6 +53,7 @@ installPackages()
     #mv /etc/dropbear/authorized_keys /root/.ssh/
     #rm -rf /etc/dropbear
     # CUSTOMIZE
+    sed -i '/v2raya/d' /etc/opkg/customfeeds.conf
     # install some more packages that don't need any extra steps
    log_say "updating all packages!"
 
