@@ -78,16 +78,12 @@ installPackages()
    log_say "░░░░░   ░░░░░  ░░░░░░    ░░░░░░░░    ░░░░░   ░░░░░░  ░░░░░            "
 
    opkg update
-   #install mesh support
-   opkg remove wpad
-   opkg remove wpad wpad-basic
-   opkg remove wpad-basic-openssl
-   opkg remove wpad-basic-wolfssl
-   opkg remove wpad-wolfssl
-   opkg install wpad-mesh-openssl
-   opkg install kmod-batman-adv
-   opkg install batctl
-   opkg install avahi-autoipd
+   ## INSTALL MESH  ##
+   log_say "Installing Mesh Packages..."
+   opkg remove wpad wpad-basic wpad-basic-openssl wpad-basic-wolfssl wpad-wolfssl
+   opkg install wpad-mesh-openssl kmod-batman-adv batctl avahi-autoipd batctl-full luci-app-dawn
+   opkg install /etc/luci-app-easymesh_2.2_all.ipk
+   opkg install /etc/luci-proto-batman-adv_git-22.104.47289-0a762fd_all.ipk
    
    #Go Go Packages
    opkg install base-files busybox ca-bundle cgi-io dnsmasq dropbear firewall fstools fwtool getrandom hostapd-common ip6tables iptables iw iwinfo jshn jsonfilter kernel 
